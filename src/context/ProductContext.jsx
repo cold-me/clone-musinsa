@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
 
 const ProductContext = createContext();
 const ProductProvider = ({ children }) => {
@@ -8,14 +8,21 @@ const ProductProvider = ({ children }) => {
         const response = await fetch(url);
         const data = await response.json();
         setProductList(data);
-        console.log('object', data);
     };
 
     useEffect(() => {
         fetchData();
     }, []);
 
-    return <ProductContext.Provider value={{ productList, setProductList }}>{children}</ProductContext.Provider>;
+    const newList = useMemo(() => productList.filter((item) => item?.new));
+    const saleList = useMemo(() => productList.filter((item) => !item?.new && !item?.choice));
+    const rankingList = useMemo(() => productList.filter((item) => item?.choice));
+
+    return (
+        <ProductContext.Provider value={{ productList, setProductList, newList, saleList, rankingList }}>
+            {children}
+        </ProductContext.Provider>
+    );
 };
 const useProductData = () => useContext(ProductContext);
 export { ProductProvider, useProductData };

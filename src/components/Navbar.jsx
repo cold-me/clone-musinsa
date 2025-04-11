@@ -1,10 +1,9 @@
-import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import { faList, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-const Navbar = () => {
-    const myPage = ['마이페이지', '좋아요', '장바구니'];
+import { myPageList } from '../constants/myPageList';
+const Navbar = ({ isOpenSideBar, setIsOpenSideBar }) => {
     const menuList = [
         { label: '전체', slug: 'products' },
         { label: '랭킹', slug: 'ranking' },
@@ -17,6 +16,16 @@ const Navbar = () => {
     const navigate = useNavigate();
     const goToCategory = (item) => navigate(`/${item?.slug}`);
     const goToTheHome = () => navigate('/');
+    const goToMy = (item) => navigate(`/${item?.slug}`);
+    const search = (e) => {
+        if (e.key === 'Enter') {
+            const keyword = e.target.value;
+            navigate(`/products/?q=${keyword}`);
+        }
+    };
+    useEffect(() => {
+        console.log('side:', isOpenSideBar);
+    }, [isOpenSideBar]);
     return (
         <div className='nav'>
             <div className='logo-container'>
@@ -25,13 +34,28 @@ const Navbar = () => {
                     onClick={() => goToTheHome()}
                 />
                 <ul className='nav-mypage'>
-                    {myPage.map((item, i) => (
-                        <li key={i}>{item}</li>
+                    <FontAwesomeIcon
+                        className='category'
+                        onClick={() => setIsOpenSideBar((prev) => !prev)}
+                        icon={faList}
+                        style={{ color: 'white' }}
+                    />
+                    {myPageList.map((item, i) => (
+                        <div className='category-list'>
+                            <li key={i} onClick={() => goToMy(item)}>
+                                {item.label}
+                            </li>
+                        </div>
                     ))}
                 </ul>
             </div>
             <div className='container-horizontal'>
-                <input className='nav-search' type='text' placeholder='슈즈 페스티벌 최대 80% 할인' />
+                <input
+                    onKeyPress={(e) => search(e)}
+                    className='nav-search'
+                    type='text'
+                    placeholder='슈즈 페스티벌 최대 80% 할인'
+                />
                 <FontAwesomeIcon icon={faMagnifyingGlass} className='magnifying-glass-logo' />
             </div>
             <ul className='nav-menu'>
