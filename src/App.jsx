@@ -33,6 +33,8 @@ function App() {
                 <Route path='/brand' element={<Brand />} />
                 <Route path='/shoes-festival' element={<Brand />} />
                 <Route path='/summer-coupon' element={<Brand />} />
+                <Route path='/like' element={<Brand />} />
+                <Route path='/shopping-box' element={<Brand />} />
             </Routes>
         </>
     );

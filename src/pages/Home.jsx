@@ -8,7 +8,7 @@ import TimeSale from '../components/TimeSale';
 const Home = () => {
     return (
         <div>
-            <div className='margin-top-4rem'>
+            <div>
                 <MainBanner />
                 <Ranking />
                 <TimeSale />
